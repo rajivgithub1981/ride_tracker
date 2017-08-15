@@ -1,6 +1,5 @@
 package com.pluralsight.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,24 @@ public class RideRepositoryImpl implements RideRepository {
 	
 	@Override
 	public List<Ride> getRides() {
-		Ride ride = new Ride();
-		ride.setName("Corner Canyon");
-		ride.setDuration(120);
-		List <Ride> rides = new ArrayList<>();
-		rides.add(ride);
-		return rides;
+		
+		
+		List<Ride> allRides = jdbcTemplate.query("select * from ride", (resultSet,rowNum) -> {
+			Ride ride = new Ride();
+			ride.setId(resultSet.getInt("id"));
+			ride.setName(resultSet.getString("name"));
+			ride.setDuration(resultSet.getInt("duration"));
+			return ride;
+			}
+		);
+		
+		return allRides;
+	}
+
+	@Override
+	public Ride createRide(Ride ride) {
+		jdbcTemplate.update("insert into ride(name,duration) values (?,?)", ride.getName(),ride.getDuration());
+		return null;
 	}
 	
 }
