@@ -36,4 +36,29 @@ public class RestControllerTest {
 			System.out.println("Ride name: " + ride.getName());
 		}
 	}
+	
+	@Test(timeout=3000)
+	public void testGetRide() {
+		RestTemplate restTemplate = new RestTemplate();
+
+		Ride ride  = restTemplate.getForObject("http://localhost:8080/ride_tracker/ride/1",Ride.class);
+		System.out.println("Ride name: " + ride.getName());
+	}
+	
+	@Test(timeout=3000)
+	public void testUpdateRide() {
+		RestTemplate restTemplate = new RestTemplate();
+		Ride ride  = restTemplate.getForObject("http://localhost:8080/ride_tracker/ride/1",Ride.class);
+		ride.setDuration(ride.getDuration()+20);
+		 ride  = restTemplate.postForObject("http://localhost:8080/ride_tracker/ride/update",ride,Ride.class);
+		System.out.println("Ride name: " + ride.getName());
+	}
+	
+	@Test(timeout=3000)
+	public void testUpdateRideBatch() {
+		RestTemplate restTemplate = new RestTemplate();
+
+		restTemplate.getForObject("http://localhost:8080/ride_tracker/ride/updateBatch",Ride.class);
+		
+	}
 }
