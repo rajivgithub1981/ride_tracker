@@ -3,13 +3,17 @@ package com.pluralsight.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pluralsight.model.ErrorMessage;
 import com.pluralsight.model.Ride;
 import com.pluralsight.service.RideService;
 
@@ -50,4 +54,17 @@ public class RideController {
 		 rideService.delete(id);
 		 return null;
 	}
+	
+	@RequestMapping(value = "/ride/testException", method = RequestMethod.GET)
+	public @ResponseBody Object testException() {
+		 throw new RuntimeException();
+		 
+	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ErrorMessage> handleException(RuntimeException ex){
+		ErrorMessage errorMessage = new ErrorMessage(HttpStatus.OK.value(),ex.getMessage());
+		return new ResponseEntity<ErrorMessage>(errorMessage, HttpStatus.OK);
+	}
+	
 }

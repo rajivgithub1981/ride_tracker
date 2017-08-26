@@ -2,14 +2,14 @@ package com.pluralsight.controller;
 
 import java.util.List;
 
+import org.junit.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.pluralsight.model.ErrorMessage;
 import com.pluralsight.model.Ride;
-
-import org.junit.Test;
 
 public class RestControllerTest {
 	@Test(timeout=3000)
@@ -64,6 +64,14 @@ public class RestControllerTest {
 	public void testDeleteRide() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.delete("http://localhost:8080/ride_tracker/ride/delete/2");
+		
+	}
+	
+	@Test(timeout=3000)
+	public void testException() {
+		RestTemplate restTemplate = new RestTemplate();
+		ErrorMessage errorMessage = restTemplate.getForObject("http://localhost:8080/ride_tracker/ride/testException",ErrorMessage.class);
+		System.out.println("Error code: " + errorMessage.getCode() + " Error Message: " + errorMessage.getMessage());
 		
 	}
 }
