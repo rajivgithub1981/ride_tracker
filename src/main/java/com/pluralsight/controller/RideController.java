@@ -44,4 +44,10 @@ public class RideController {
 		 rideService.updateBatch();
 		 return null;
 	}
+	
+	@RequestMapping(value = "/ride/delete/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody Object delete(@PathVariable Integer id) {
+		 rideService.delete(id);
+		 return null;
+	}
 }
